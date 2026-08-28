@@ -1,0 +1,119 @@
+{
+  "package": "SPARTIN",
+  "package_version": "0.0.0.9000",
+  "source": "github.com/bayesrx/SPARTIN",
+  "statistic": "CTIP, the posterior probability that the fitted tumor-TIL interaction exceeds a null with TILs re-simulated as Poisson at matched intensity and tumor cells held fixed",
+  "probe": {
+    "n_fields": 12,
+    "ctip": [
+      0.0,
+      0.0,
+      0.04,
+      0.0,
+      0.0,
+      0.0725,
+      0.9675,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.8325
+    ],
+    "dG": [
+      -0.88,
+      -0.6137,
+      -0.5189,
+      -0.4437,
+      -0.3683,
+      -0.3009,
+      -0.2404,
+      -0.1842,
+      -0.1264,
+      -0.0806,
+      -0.0429,
+      0.0038
+    ],
+    "image_id": [
+      "#06 2-306-657 P44_[50496,11785].im3",
+      "#21 3-119-387_[50885,16288].im3",
+      "#23 2-980-305_[44312,15022].im3",
+      "#41 1-949-860_[37817,18882].im3",
+      "#15 2-990-659 P44_[51965,9872].im3",
+      "#31 2-517-007_[60329,17000].im3",
+      "#47 1-434-090_[38892,18016].im3",
+      "#25 2-941-470_[45954,20447].im3",
+      "#33 6-144-782_[57690,18715].im3",
+      "#14 3-320-794_[55215,15676].im3",
+      "#51 6-432-157_[48431,13778].im3",
+      "#35 2-372-826_[47237,18234].im3"
+    ],
+    "secs": [
+      82,
+      80,
+      49,
+      51,
+      82,
+      43,
+      17,
+      161,
+      494,
+      66,
+      339,
+      113
+    ],
+    "ctip_min": 0.0,
+    "ctip_max": 0.9675,
+    "n_distinct": 5,
+    "spearman_vs_dG": 0.1747,
+    "between_field_sd": 0.34787198043637735
+  },
+  "stability": [
+    {
+      "tag": "reduced",
+      "label": "reduced (n.null 3, n.sample 2,500)",
+      "ctip": [
+        0.9375,
+        0.905,
+        0.8625,
+        0.96,
+        0.75,
+        0.6825
+      ],
+      "n_reps": 6,
+      "min": 0.6825,
+      "max": 0.96,
+      "sd": 0.11044700840976483,
+      "range": 0.27749999999999997,
+      "image_id": "#35 2-372-826_[47237,18234].im3"
+    },
+    {
+      "tag": "default",
+      "label": "package default (n.null 5, n.sample 11,000)",
+      "ctip": [
+        0.907,
+        0.939,
+        0.8215
+      ],
+      "n_reps": 3,
+      "min": 0.8215,
+      "max": 0.939,
+      "sd": 0.060746056113408144,
+      "range": 0.11749999999999994,
+      "image_id": "#35 2-372-826_[47237,18234].im3"
+    }
+  ],
+  "cost": {
+    "secs_per_field_reduced": 131.4146,
+    "secs_per_field_default": 456.0,
+    "hours_full_cohort_reduced": 27.77958627777778,
+    "hours_full_cohort_default": 96.39333333333333,
+    "n_fields": 761
+  },
+  "workarounds": [
+    "marks must be a factor with levels \"1\" (tumor) and \"2\" (TIL); other names give zero counts silently, not an error",
+    "spatstat.random must be attached: rpoispp is called unqualified",
+    "DreameSpase needed CXX_STD raised in src/Makevars before it would build"
+  ],
+  "verdict": "SPARTIN runs, and its CTIP is not saturated on this cohort: across 12 fields spanning this portal's full immune-tumor co-localisation range it takes 5 distinct values from 0.00 to 0.97. What stops it being a patient-level feature here is reproducibility against cost. Refitting one unchanged field with only the seed changed moves CTIP by 0.28 at reduced MCMC settings (6 reps, sd 0.110) and still by 0.12 at the package defaults (3 reps, sd 0.061). The between-field spread over the probe is sd 0.35, so at reduced settings the noise is the same size as the signal, and the defaults that halve it cost 456 s per field, which is 96 hours for 761 fields on one machine. This is a scale mismatch, not a defect: SPARTIN is built for whole biopsies tessellated into many tiles, where per-tile CTIP is aggregated and this Monte Carlo noise averages out. These 0.34 mm\u00b2 fields are about one tile each, so the per-tile estimate is used raw, which is exactly where the noise lives.",
+  "shipped_as_feature": false
+}
